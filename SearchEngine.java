@@ -3,7 +3,7 @@ import java.net.URI;
 import java.util.ArrayList;
 
 class Handler implements URLHandler {
-    ArrayList<String> strings = new ArrayList();
+    ArrayList<String> strings = new ArrayList(100);
 
     public String handleRequest(URI url) {
         if (url.getPath().equals("/")) {
@@ -18,7 +18,7 @@ class Handler implements URLHandler {
                     index += 1;
                 }
 
-                if (index > 9) {
+                if (index > 99) {
                     return String.format("No more Strings can be added!");
                 }
                 else {
@@ -32,7 +32,7 @@ class Handler implements URLHandler {
             if (url.getPath().contains("/search")) {
                 String[] parameters = url.getQuery().split("=");
                 if (parameters[0].equals("s")) {
-                    ArrayList<String> results = new ArrayList();
+                    ArrayList<String> results = new ArrayList(100);
                     int index = 0;
 
                     while (strings.get(index) != null) {
