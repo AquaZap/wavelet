@@ -3,7 +3,7 @@ import java.net.URI;
 import java.util.ArrayList;
 
 class Handler implements URLHandler {
-    ArrayList<String> strings = new ArrayList<String>(100);
+    ArrayList<String> strings = new ArrayList<String>();
 
     public String handleRequest(URI url) {
         if (url.getPath().equals("/")) {
@@ -12,18 +12,9 @@ class Handler implements URLHandler {
         else if (url.getPath().contains("/add")) {
             String[] parameters = url.getQuery().split("=");
             if (parameters[0].equals("s")) {
-                int index = 0;
-                    
-                while (strings.get(index) != null) {
-                    index += 1;
-                }
-
-                if (index > 99) {
-                    return String.format("No more Strings can be added!");
-                }
-                else {
-                    strings.set(index, parameters[1]);
-                    return String.format("The String %s has been added", parameters[1]);
+                if(strings.size() != 100) {
+                    strings.add(parameters[1]);
+                    return String.format("Added %s to the list of strings!", parameters[1]);
                 }
             }
             return "404 Not Found!";
@@ -32,18 +23,16 @@ class Handler implements URLHandler {
             if (url.getPath().contains("/search")) {
                 String[] parameters = url.getQuery().split("=");
                 if (parameters[0].equals("s")) {
-                    ArrayList<String> results = new ArrayList<String>(100);
-                    int index = 0;
+                    ArrayList<String> results = new ArrayList<String>();
 
-                    while (strings.get(index) != null) {
-                        if (strings.get(index).contains(parameters[1])) {
-                            results.set(index, parameters[1]);
+                    for (int i = 0; i < strings.size(); i++) {
+                        if(strings.get(i).contains(parameters[1])) {
+                            results.add(strings.get(i));
                         }
-                        index += 1;
                     }
 
                     if (results.size() == 0) {
-                        return String.format("No Strings containing %s were found", parameters[1]);
+                        return "Word cannot be found in any of the Strings";
                     }
                     else {
                         return results.toString();
