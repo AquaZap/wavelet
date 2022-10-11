@@ -1,8 +1,9 @@
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 
 class Handler implements URLHandler {
-    String[] strings = new String[100];
+    ArrayList<String> strings = new ArrayList();
 
     public String handleRequest(URI url) {
         if (url.getPath().equals("/")) {
@@ -13,15 +14,15 @@ class Handler implements URLHandler {
             if (parameters[0].equals("s")) {
                 int index = 0;
                     
-                while (strings[index] != null) {
+                while (strings.get(index) != null) {
                     index += 1;
                 }
 
-                if (index > 99) {
+                if (index > 9) {
                     return String.format("No more Strings can be added!");
                 }
                 else {
-                    strings[index] = parameters[1];
+                    strings.set(index, parameters[1]);
                     return String.format("The String %s has been added", parameters[1]);
                 }
             }
@@ -31,17 +32,17 @@ class Handler implements URLHandler {
             if (url.getPath().contains("/search")) {
                 String[] parameters = url.getQuery().split("=");
                 if (parameters[0].equals("s")) {
-                    String[] results = new String[100];
+                    ArrayList<String> results = new ArrayList();
                     int index = 0;
 
-                    while (strings[index] != null) {
-                        if (strings[index].contains(parameters[1])) {
-                            results[index] = parameters[1];
+                    while (strings.get(index) != null) {
+                        if (strings.get(index).contains(parameters[1])) {
+                            results.set(index, parameters[1]);
                         }
                         index += 1;
                     }
 
-                    if (results.length == 0) {
+                    if (results.size() == 0) {
                         return String.format("No Strings containing %s were found", parameters[1]);
                     }
                     else {
